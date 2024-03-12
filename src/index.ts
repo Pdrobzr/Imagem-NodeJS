@@ -2,9 +2,13 @@ import express from 'express';
 import multer from 'multer';
 import { storage } from './multerConfig';
 import { prisma } from './prisma';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const upload = multer({ storage: storage });
 const app = express();
+const PORT = process.env.PORT || 8079;
 
 app.use('/files', express.static("uploads"));
 
@@ -22,6 +26,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
-app.listen(8079, () => {
-    console.log("Server rodando na porta 8079!");
+app.listen(PORT, () => {
+    console.log(`Server rodando na porta ${PORT}!`);
 });
