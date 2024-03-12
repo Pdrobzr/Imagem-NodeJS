@@ -12,17 +12,23 @@ const PORT = process.env.PORT || 8079;
 
 app.use('/files', express.static("uploads"));
 
+app.get('/imagens', async (req, res) => {
+    const selecionarImagens = await prisma.imagem.findMany();
+
+    return res.json(selecionarImagens);
+})
+
 app.post('/upload', upload.single('file'), async (req, res) => {
     if (req.file) {
-        const nomeImagem = req.file.fieldname;
+        const nomeImagem = req.file.filename;
         const uriImagem = req.file.path;
-        const adicionarImage = await prisma.imagem.create({
+        const adicionarImagem = await prisma.imagem.create({
             data: {
                 nomeImagem,
                 uriImagem
             }
         });
-        return res.json({adicionarImage});
+        return res.json({adicionarImagem});
     }
 });
 
